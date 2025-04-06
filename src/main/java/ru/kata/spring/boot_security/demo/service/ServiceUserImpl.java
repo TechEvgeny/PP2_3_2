@@ -61,6 +61,7 @@ public class ServiceUserImpl implements ServiceUser {
     @Transactional
     public void update(int id, User udatedUser) {
         udatedUser.setId(id);
+        udatedUser.setPassword(passwordEncoder.encode(udatedUser.getPassword()));
         userRepository.save(udatedUser);
     }
     @Override
@@ -68,6 +69,9 @@ public class ServiceUserImpl implements ServiceUser {
     public Role getRoleByName(String name) {
         return roleRepository.getRoleByName(name);
     }
+
+
+
 }
 
 

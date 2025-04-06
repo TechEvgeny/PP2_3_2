@@ -6,20 +6,26 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "users_roles")
+@Table(name = "roles")
 public class Role implements GrantedAuthority {
 
     @Id
-    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    public Role() {
+    }
+
+    public Role(String name) {
+        this.name = name;
+
+    }
 
     public int getRoleId() {
         return roleId;
@@ -40,6 +46,11 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return this.name;
+        return getName();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -28,24 +28,15 @@ public class UserService implements UserDetailsService {
     }
 
 
-public User findByUsername(String username) {
-        return userRepository.findByName(username);
-}
-
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = userRepository.findByName(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'", username));
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+        return user;
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
 }
 

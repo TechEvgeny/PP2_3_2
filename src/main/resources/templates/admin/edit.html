@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Меняем юзера</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/admin/edit(id=${user.getId()})}" th:object="${user}">
+    <label for="name"> Введите имя:</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <br/>
+    <label for="age"> Введите возраст:</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name Error</div>
+    <br/>
+    <label for="email"> Введите email:</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+    <label for="password"> Введите пароль:</label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <br/>
+    <label for="editRole">Роли</label>
+    <br>
+    <select id="editRole" size="2" name="editRoles" multiple="multiple">
+        <option th:each="role : ${rolesList}"
+                th:value="${role.name}"
+                th:text="${#strings.replace(role.name, 'ROLE_', '')}"
+                th:selected="${#sets.contains(user.roles,role)}">
+        </option>
+    </select>
+    <br>
+    <input type="submit" value="Update!">
+
+
+</form>
+<div><a href="/logout">Выйти</a></div>
+
+
+</body>
+</html>

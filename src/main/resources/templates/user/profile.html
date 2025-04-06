@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Показываем юзера</title>
+</head>
+<body>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Возраст</th>
+            <th>Электронная почта</th>
+            <th>Роль</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usr : ${user}">
+            <td th:text="${usr.getId()}"></td>
+            <td th:text="${usr.getName()}"></td>
+            <td th:text="${usr.getAge()}"></td>
+            <td th:text="${usr.getEmail()}"></td>
+            <td><span th:each="role : ${usr.getRoles()}" th:text="${role} + ' '"></span></td>
+            <td><a href="/logout">Выйти</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
