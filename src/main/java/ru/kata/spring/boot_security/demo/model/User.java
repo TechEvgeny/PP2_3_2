@@ -23,7 +23,7 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Фамилия не должна быть пустой")
     @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ]+$", message = "Фамилия может содержать только буквы")
-    @Column(name = "name")
+    @Column(name = "name",unique = true)
     private String name;
 
     @Min(value = 0, message = "возраст не может быть отрицательным")
@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String password;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
 
