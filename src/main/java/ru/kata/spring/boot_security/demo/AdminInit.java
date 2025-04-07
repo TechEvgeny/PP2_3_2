@@ -53,6 +53,21 @@ public class AdminInit implements CommandLineRunner {
 
         }
         userRepository.save(userAdmin);
+        Set<Role> roles1 = new HashSet<>();
+
+        roles1.add(user);
+
+        User cat = userRepository.findByName("cat");
+        if (cat == null) {
+            cat = new User(
+                    "cat",
+                    4,
+                    "cat@mail.com",
+                    passwordEncoder.encode("111"),
+                    roles1);
+
+        }
+        userRepository.save(cat);
 
     }
 }

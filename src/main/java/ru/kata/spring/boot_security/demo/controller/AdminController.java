@@ -36,24 +36,25 @@ public class AdminController {
     @GetMapping("/newUser")
     public String newUser(Model model) {
         model.addAttribute("user", new User());
-        List<Role> roles = serviceUser.getAllRoles();
-        model.addAttribute("rolesList", roles);
+        model.addAttribute("rolesList", serviceUser.getAllRoles());
         return "admin/newUser";
     }
 
     @PostMapping()
     public String createUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam("nameRoles") String[] roles,
-                             BindingResult bindingResult) {
+                             BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("rolesList", serviceUser.getAllRoles());
+            return "admin/newUser";
 
+        }
         Set<Role> roleSet = new HashSet<>();
         for (String role : roles) {
             roleSet.add(serviceUser.getRoleByName(role));
         }
         user.setRoles(roleSet);
-        if (bindingResult.hasErrors()) {
-            return "admin/newUser";
-        }
+
         serviceUser.save(user);
         return "redirect:/admin";
     }
@@ -80,16 +81,15 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String updateUser(@RequestParam("id") int id, @RequestParam("editRoles") String[] roles,
-                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("rolesList", serviceUser.getAllRoles());
             return "admin/edit";
         }
         Set<Role> roleSet = new HashSet<>();
         for (String role : roles) {
             roleSet.add(serviceUser.getRoleByName(role));
         }
-        System.out.println(roleSet);
-        System.out.println(user);
         user.setRoles(roleSet);
         serviceUser.update(id, user);
         return "redirect:/admin";
